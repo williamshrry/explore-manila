@@ -1,57 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Manila Aerial Explorer</title>
-
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aerial Explorer</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div id="viewer">
 
-  <!-- IMAGE VIEWER -->
+  <!-- IMAGE -->
   <div id="imageContainer">
     <div id="imageWrapper">
-      <img id="mainImage" src="" alt="Aerial View">
-    </div>
-  </div>
-
-  <div id="overlay"></div>
-
-  <!-- TOP UI -->
-  <div id="topBar">
-    <div class="title">MANILA AERIAL EXPLORER</div>
-    <div class="subtitle">
-      Interactive aerial perspectives around the Manila Post Office
+      <img id="mainImage">
     </div>
   </div>
 
   <!-- ORBIT UI -->
   <div id="orbitUI">
 
-    <img id="orbitMap" src="images/topview.jpg" />
+    <div id="orbitMapWrapper">
+
+      <img id="orbitMap" src="images/topview.png">
+
+      <div id="orbitPins"></div>
+
+      <div class="orbitCenter"></div>
+
+    </div>
 
     <div id="sectorHighlight"></div>
 
-    <div class="orbitCenter"></div>
-
-    <div id="orbitNodes"></div>
-
-  </div>
-
-  <!-- INFO -->
-  <div id="photoInfo">
-    <div id="photoTitle"></div>
-    <div id="photoMeta"></div>
-  </div>
-
-  <!-- CONTROLS -->
-  <div id="controls">
-    <button id="leftBtn">←</button>
-    <button id="rightBtn">→</button>
   </div>
 
 </div>
