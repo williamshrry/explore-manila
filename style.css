@@ -37,8 +37,8 @@ MAIN IMAGE
   width: 100%;
   height: 100%;
   object-fit: cover;
-  user-select: none;
   pointer-events: none;
+  user-select: none;
 }
 
 /* =========================
@@ -59,11 +59,9 @@ ORBIT UI
   overflow: hidden;
 
   border: 1px solid rgba(255,255,255,0.2);
-
-  transition: transform 0.2s ease;
 }
 
-/* MAP WRAPPER (ROTATION + SCALE BASE) */
+/* MAP WRAPPER */
 #orbitMapWrapper {
   width: 100%;
   height: 100%;
@@ -84,7 +82,6 @@ ORBIT UI
 /* CENTER */
 .orbitCenter {
   position: absolute;
-
   width: 10px;
   height: 10px;
 
@@ -97,16 +94,13 @@ ORBIT UI
 }
 
 /* =========================
-PINS SYSTEM
+PINS
 ========================= */
 
 #orbitPins {
   position: absolute;
   width: 100%;
   height: 100%;
-
-  transform-origin: center;
-  z-index: 3;
 }
 
 .orbitPin {
@@ -122,7 +116,7 @@ PINS SYSTEM
 }
 
 /* =========================
-SECTOR OVERLAY
+SECTOR
 ========================= */
 
 #sectorHighlight {
