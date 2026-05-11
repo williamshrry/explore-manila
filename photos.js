@@ -9,7 +9,7 @@ const photos = [
     title: "Front Right Perspective",
     image: "images/img1.jpg",
 
-    orbitAngle: 45,
+    orbitAngle: 175,
     elevation: 20,
     distance: 700,
 
@@ -22,7 +22,7 @@ const photos = [
     title: "Right Side Perspective",
     image: "images/img2.jpg",
 
-    orbitAngle: 90,
+    orbitAngle: 100,
     elevation: 18,
     distance: 650,
 
@@ -35,7 +35,20 @@ const photos = [
     title: "Rear Left Perspective",
     image: "images/img3.jpg",
 
-    orbitAngle: 220,
+    orbitAngle: 20,
+    elevation: 22,
+    distance: 800,
+
+    description:
+      "Rear-left aerial perspective with deeper urban backdrop."
+  },
+
+  {
+    id: 3,
+    title: "Rear Left Perspective",
+    image: "images/img4.jpg",
+
+    orbitAngle: 330,
     elevation: 22,
     distance: 800,
 
