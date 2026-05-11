@@ -1,0 +1,60 @@
+<!-- =========================
+FILE: index.html
+========================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Manila Aerial Explorer</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- BACKGROUND VIEWER -->
+  <div id="viewer">
+
+    <div id="imageContainer">
+      <img id="mainImage" src="" alt="Historical Manila View">
+    </div>
+
+    <div id="overlay"></div>
+
+    <!-- TOP INFO -->
+    <div id="topBar">
+      <div class="title">
+        MANILA AERIAL EXPLORER
+      </div>
+
+      <div class="subtitle">
+        Interactive aerial perspectives around the Manila Post Office
+      </div>
+    </div>
+
+    <!-- ORBIT COMPASS -->
+    <div id="orbitUI">
+      <div class="orbitCenter"></div>
+      <div id="orbitNodes"></div>
+    </div>
+
+    <!-- IMAGE INFO -->
+    <div id="photoInfo">
+      <div id="photoTitle">Loading...</div>
+      <div id="photoMeta"></div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div id="controls">
+      <button id="leftBtn">←</button>
+      <button id="rightBtn">→</button>
+    </div>
+
+  </div>
+
+  <script src="photos.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
