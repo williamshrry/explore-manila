@@ -1,15 +1,10 @@
-/* =========================
-GLOBAL RESET
-========================= */
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -18,10 +13,7 @@ body {
   color: white;
 }
 
-/* =========================
-MAIN VIEWER
-========================= */
-
+/* VIEWER */
 #viewer {
   width: 100%;
   height: 100%;
@@ -29,46 +21,38 @@ MAIN VIEWER
 }
 
 /* IMAGE */
-
 #imageContainer {
   width: 100%;
   height: 100%;
   position: absolute;
+  overflow: hidden;
+}
+
+#imageWrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform: scale(1) translate(0px, 0px);
+  transform-origin: center;
+  cursor: grab;
 }
 
 #mainImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-
-  transition: opacity 0.8s ease, transform 1.2s ease;
-  opacity: 1;
-
-  filter: contrast(1.05) brightness(0.95);
+  pointer-events: none;
+  user-select: none;
 }
 
-.fadeOut {
-  opacity: 0;
-  transform: scale(1.03);
-}
-
-/* DARK OVERLAY */
-
+/* OVERLAY */
 #overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0,0,0,0.65),
-    rgba(0,0,0,0.1),
-    rgba(0,0,0,0.45)
-  );
+  background: linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0.1));
 }
 
-/* =========================
-TOP UI
-========================= */
-
+/* TOP BAR */
 #topBar {
   position: absolute;
   top: 40px;
@@ -78,206 +62,103 @@ TOP UI
 
 .title {
   font-size: 34px;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-
-.subtitle {
-  margin-top: 8px;
-  opacity: 0.75;
-  font-size: 14px;
-}
-
-/* =========================
-PHOTO INFO
-========================= */
-
-#photoInfo {
-  position: absolute;
-  left: 40px;
-  bottom: 40px;
-  z-index: 10;
-}
-
-#photoTitle {
-  font-size: 24px;
   font-weight: bold;
 }
 
-#photoMeta {
-  margin-top: 8px;
-  opacity: 0.75;
+.subtitle {
+  font-size: 14px;
+  opacity: 0.7;
+  margin-top: 6px;
 }
 
-/* =========================
-CONTROLS
-========================= */
-
-#controls {
+/* PHOTO INFO */
+#photoInfo {
   position: absolute;
-  right: 40px;
   bottom: 40px;
-  display: flex;
-  gap: 12px;
+  left: 40px;
   z-index: 10;
 }
 
-#controls button {
-  width: 60px;
-  height: 60px;
-
-  border: none;
-  border-radius: 50%;
-
-  background: rgba(255,255,255,0.12);
-  color: white;
-
-  font-size: 22px;
-  cursor: pointer;
-
-  backdrop-filter: blur(8px);
-
-  transition: 0.2s;
+/* CONTROLS */
+#controls {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  z-index: 10;
 }
 
-#controls button:hover {
-  background: rgba(255,255,255,0.22);
-  transform: scale(1.05);
-}
-
-/* =========================
-ORBIT UI (RADAR MAP)
-========================= */
-
+/* ORBIT UI */
 #orbitUI {
   position: absolute;
   top: 50%;
   right: 60px;
-
   width: 180px;
   height: 180px;
-
   transform: translateY(-50%) scale(1);
-  transform-origin: center;
-
   border-radius: 50%;
   overflow: hidden;
-
   border: 1px solid rgba(255,255,255,0.15);
-
   z-index: 10;
-
-  transition: transform 0.25s ease, width 0.25s ease, height 0.25s ease;
+  transition: transform 0.2s ease;
 }
 
-/* HOVER EXPAND */
 #orbitUI:hover {
-  width: 280px;
-  height: 280px;
-
-  transform: translateY(-50%) scale(1.05);
+  transform: translateY(-50%) scale(1.15);
 }
 
-/* =========================
-MAP LAYER (BOTTOM)
-========================= */
-
+/* MAP */
 #orbitMap {
   position: absolute;
   width: 100%;
   height: 100%;
   object-fit: cover;
-
-  border-radius: 50%;
-
-  opacity: 0.75;
-  filter: contrast(1.1) brightness(0.9);
-
+  opacity: 0.8;
   z-index: 1;
 }
 
-/* =========================
-CENTER DOT (MIDDLE)
-========================= */
-
-.orbitCenter {
+/* SECTOR */
+#sectorHighlight {
   position: absolute;
-
-  width: 12px;
-  height: 12px;
-
-  background: white;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
+  background: conic-gradient(
+    rgba(255,255,255,0.15),
+    transparent
+  );
   z-index: 2;
 }
 
-/* =========================
-ORBIT NODES (TOP / CLICKABLE)
-========================= */
-
-.orbitNode {
+/* CENTER */
+.orbitCenter {
   position: absolute;
-
-  width: 14px;
-  height: 14px;
-
+  width: 12px;
+  height: 12px;
+  background: white;
   border-radius: 50%;
-
-  background: rgba(255,255,255,0.6);
-  cursor: pointer;
-
-  transition: transform 0.2s ease, background 0.2s ease;
-
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 3;
 }
 
-#orbitUI:hover .orbitNode {
-  transform: scale(1.2);
+/* NODES */
+.orbitNode {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  cursor: pointer;
+  z-index: 3;
 }
 
 .orbitNode:hover {
-  transform: scale(1.4);
+  transform: scale(1.3);
   background: white;
 }
 
 .orbitNode.active {
   background: white;
-  box-shadow: 0 0 12px white;
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media (max-width: 900px) {
-
-  .title {
-    font-size: 24px;
-  }
-
-  #orbitUI {
-    width: 130px;
-    height: 130px;
-    right: 20px;
-  }
-
-  #controls {
-    right: 20px;
-    bottom: 20px;
-  }
-
-  #photoInfo {
-    left: 20px;
-    bottom: 20px;
-  }
-
-  #topBar {
-    left: 20px;
-    top: 20px;
-  }
+  box-shadow: 0 0 10px white;
 }
