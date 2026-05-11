@@ -1,4 +1,3 @@
-/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +12,7 @@ html, body {
 }
 
 /* =========================
-MAIN IMAGE (ZOOM + PAN)
+MAIN IMAGE
 ========================= */
 
 #imageContainer {
@@ -30,6 +29,7 @@ MAIN IMAGE (ZOOM + PAN)
 
   transform: scale(1) translate(0px, 0px);
   transform-origin: center;
+
   cursor: grab;
 }
 
@@ -54,15 +54,16 @@ ORBIT UI
   height: 200px;
 
   transform: translateY(-50%) scale(1);
-  border-radius: 50%;
 
+  border-radius: 50%;
   overflow: hidden;
+
   border: 1px solid rgba(255,255,255,0.2);
 
   transition: transform 0.2s ease;
 }
 
-/* MAP WRAPPER (ROTATION CORE) */
+/* MAP WRAPPER (ROTATION + SCALE BASE) */
 #orbitMapWrapper {
   width: 100%;
   height: 100%;
@@ -83,6 +84,7 @@ ORBIT UI
 /* CENTER */
 .orbitCenter {
   position: absolute;
+
   width: 10px;
   height: 10px;
 
@@ -95,8 +97,17 @@ ORBIT UI
 }
 
 /* =========================
-PINS (IMPORTANT)
+PINS SYSTEM
 ========================= */
+
+#orbitPins {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  transform-origin: center;
+  z-index: 3;
+}
 
 .orbitPin {
   position: absolute;
@@ -110,7 +121,10 @@ PINS (IMPORTANT)
   transform: translate(-50%, -50%);
 }
 
-/* SECTOR */
+/* =========================
+SECTOR OVERLAY
+========================= */
+
 #sectorHighlight {
   position: absolute;
   width: 100%;
