@@ -13,6 +13,7 @@ IMAGE STATE
 let imgScale = 1;
 let imgX = 0;
 let imgY = 0;
+
 let draggingImg = false;
 let startX = 0;
 let startY = 0;
@@ -23,11 +24,12 @@ ORBIT STATE
 
 let rotation = 0;
 let orbitScale = 1;
+
 let draggingOrbit = false;
 let lastX = 0;
 
 /* =========================
-IMAGE ZOOM + PAN
+IMAGE PAN
 ========================= */
 
 imageWrapper.addEventListener("mousedown", (e) => {
@@ -39,6 +41,7 @@ imageWrapper.addEventListener("mousedown", (e) => {
 window.addEventListener("mouseup", () => draggingImg = false);
 
 window.addEventListener("mousemove", (e) => {
+
   if (!draggingImg) return;
 
   imgX = e.clientX - startX;
@@ -48,7 +51,12 @@ window.addEventListener("mousemove", (e) => {
     `translate(${imgX}px, ${imgY}px) scale(${imgScale})`;
 });
 
+/* =========================
+IMAGE ZOOM
+========================= */
+
 orbitUI.addEventListener("wheel", (e) => {
+
   e.preventDefault();
 
   imgScale += e.deltaY < 0 ? 0.1 : -0.1;
@@ -60,7 +68,7 @@ orbitUI.addEventListener("wheel", (e) => {
 }, { passive: false });
 
 /* =========================
-ORBIT ROTATION (MAP)
+ORBIT ROTATION (DRAG)
 ========================= */
 
 orbitUI.addEventListener("mousedown", (e) => {
@@ -82,10 +90,10 @@ window.addEventListener("mousemove", (e) => {
   orbitMapWrapper.style.transform =
     `rotate(${rotation}deg) scale(${orbitScale})`;
 
-  sectorHighlight.style.transform =
-    `rotate(${rotation}deg)`;
-
   orbitPins.style.transform =
+    `rotate(${rotation}deg) scale(${orbitScale})`;
+
+  sectorHighlight.style.transform =
     `rotate(${rotation}deg)`;
 
 });
@@ -104,6 +112,9 @@ orbitUI.addEventListener("wheel", (e) => {
   orbitMapWrapper.style.transform =
     `rotate(${rotation}deg) scale(${orbitScale})`;
 
+  orbitPins.style.transform =
+    `rotate(${rotation}deg) scale(${orbitScale})`;
+
 }, { passive: false });
 
 /* =========================
@@ -117,10 +128,12 @@ function loadImage(i) {
 loadImage(0);
 
 /* =========================
-BUILD PINS (FIXED TO MAP)
+CREATE PINS (ANGLE + DISTANCE)
 ========================= */
 
 function createPins() {
+
+  orbitPins.innerHTML = "";
 
   photos.forEach(p => {
 
@@ -128,14 +141,19 @@ function createPins() {
     pin.className = "orbitPin";
 
     const angle = (p.orbitAngle - 90) * Math.PI / 180;
-    const r = 80;
 
-    pin.style.left = `${Math.cos(angle)*r + 100}px`;
-    pin.style.top = `${Math.sin(angle)*r + 100}px`;
+    const r = p.orbitRadius;
+
+    const center = 100;
+
+    const x = Math.cos(angle) * r + center;
+    const y = Math.sin(angle) * r + center;
+
+    pin.style.left = `${x}px`;
+    pin.style.top = `${y}px`;
 
     orbitPins.appendChild(pin);
   });
-
 }
 
 createPins();
