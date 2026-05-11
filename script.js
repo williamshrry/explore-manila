@@ -1,151 +1,141 @@
 const mainImage = document.getElementById("mainImage");
 const imageWrapper = document.getElementById("imageWrapper");
 
-const photoTitle = document.getElementById("photoTitle");
-const photoMeta = document.getElementById("photoMeta");
-
 const orbitUI = document.getElementById("orbitUI");
-const orbitMap = document.getElementById("orbitMap");
+const orbitMapWrapper = document.getElementById("orbitMapWrapper");
+const orbitPins = document.getElementById("orbitPins");
 const sectorHighlight = document.getElementById("sectorHighlight");
 
-const orbitNodesContainer = document.getElementById("orbitNodes");
+/* =========================
+IMAGE STATE
+========================= */
 
-let currentIndex = 0;
-
-/* IMAGE ZOOM/PAN */
-let scale = 1;
-let posX = 0;
-let posY = 0;
-let isDragging = false;
+let imgScale = 1;
+let imgX = 0;
+let imgY = 0;
+let draggingImg = false;
 let startX = 0;
 let startY = 0;
 
-/* ORBIT */
+/* =========================
+ORBIT STATE
+========================= */
+
 let rotation = 0;
+let orbitScale = 1;
 let draggingOrbit = false;
-let lastMouseX = 0;
+let lastX = 0;
 
-/* LOAD PHOTO */
-function loadPhoto(index) {
+/* =========================
+IMAGE ZOOM + PAN
+========================= */
 
-  currentIndex = index;
-  const photo = photos[index];
-
-  mainImage.src = photo.image;
-
-  photoTitle.textContent = photo.title;
-  photoMeta.textContent =
-    `Angle: ${photo.orbitAngle}°`;
-
-  resetImageTransform();
-  updateOrbit(photo.orbitAngle);
-  updateActiveNode();
-}
-
-/* IMAGE TRANSFORM */
-function updateTransform() {
-  imageWrapper.style.transform =
-    `translate(${posX}px, ${posY}px) scale(${scale})`;
-}
-
-function resetImageTransform() {
-  scale = 1;
-  posX = 0;
-  posY = 0;
-  updateTransform();
-}
-
-/* PAN IMAGE */
 imageWrapper.addEventListener("mousedown", (e) => {
-  isDragging = true;
-  startX = e.clientX - posX;
-  startY = e.clientY - posY;
+  draggingImg = true;
+  startX = e.clientX - imgX;
+  startY = e.clientY - imgY;
 });
 
-window.addEventListener("mouseup", () => isDragging = false);
+window.addEventListener("mouseup", () => draggingImg = false);
 
 window.addEventListener("mousemove", (e) => {
-  if (!isDragging) return;
+  if (!draggingImg) return;
 
-  posX = e.clientX - startX;
-  posY = e.clientY - startY;
-  updateTransform();
+  imgX = e.clientX - startX;
+  imgY = e.clientY - startY;
+
+  imageWrapper.style.transform =
+    `translate(${imgX}px, ${imgY}px) scale(${imgScale})`;
 });
 
-/* ZOOM IMAGE */
 orbitUI.addEventListener("wheel", (e) => {
   e.preventDefault();
-  scale += e.deltaY < 0 ? 0.1 : -0.1;
-  scale = Math.max(1, Math.min(4, scale));
-  updateTransform();
-});
 
-/* ORBIT ROTATION */
+  imgScale += e.deltaY < 0 ? 0.1 : -0.1;
+  imgScale = Math.max(1, Math.min(4, imgScale));
+
+  imageWrapper.style.transform =
+    `translate(${imgX}px, ${imgY}px) scale(${imgScale})`;
+
+}, { passive: false });
+
+/* =========================
+ORBIT ROTATION (MAP)
+========================= */
+
 orbitUI.addEventListener("mousedown", (e) => {
   draggingOrbit = true;
-  lastMouseX = e.clientX;
+  lastX = e.clientX;
 });
 
 window.addEventListener("mouseup", () => draggingOrbit = false);
 
 window.addEventListener("mousemove", (e) => {
+
   if (!draggingOrbit) return;
 
-  const delta = e.clientX - lastMouseX;
-  lastMouseX = e.clientX;
+  const dx = e.clientX - lastX;
+  lastX = e.clientX;
 
-  rotation += delta * 0.5;
+  rotation += dx * 0.4;
 
-  orbitMap.style.transform = `rotate(${rotation}deg)`;
-  sectorHighlight.style.transform = `rotate(${rotation}deg)`;
+  orbitMapWrapper.style.transform =
+    `rotate(${rotation}deg) scale(${orbitScale})`;
+
+  sectorHighlight.style.transform =
+    `rotate(${rotation}deg)`;
+
+  orbitPins.style.transform =
+    `rotate(${rotation}deg)`;
+
 });
 
-/* ORBIT UI GENERATION */
-function createNodes() {
+/* =========================
+ORBIT ZOOM
+========================= */
 
-  orbitNodesContainer.innerHTML = "";
+orbitUI.addEventListener("wheel", (e) => {
 
-  photos.forEach((p, i) => {
+  e.preventDefault();
 
-    const node = document.createElement("div");
-    node.className = "orbitNode";
+  orbitScale += e.deltaY < 0 ? 0.1 : -0.1;
+  orbitScale = Math.max(1, Math.min(2, orbitScale));
+
+  orbitMapWrapper.style.transform =
+    `rotate(${rotation}deg) scale(${orbitScale})`;
+
+}, { passive: false });
+
+/* =========================
+LOAD IMAGE
+========================= */
+
+function loadImage(i) {
+  mainImage.src = photos[i].image;
+}
+
+loadImage(0);
+
+/* =========================
+BUILD PINS (FIXED TO MAP)
+========================= */
+
+function createPins() {
+
+  photos.forEach(p => {
+
+    const pin = document.createElement("div");
+    pin.className = "orbitPin";
 
     const angle = (p.orbitAngle - 90) * Math.PI / 180;
-    const r = 70;
+    const r = 80;
 
-    node.style.left = `${Math.cos(angle)*r + 90}px`;
-    node.style.top = `${Math.sin(angle)*r + 90}px`;
+    pin.style.left = `${Math.cos(angle)*r + 100}px`;
+    pin.style.top = `${Math.sin(angle)*r + 100}px`;
 
-    node.onclick = () => loadPhoto(i);
-
-    orbitNodesContainer.appendChild(node);
+    orbitPins.appendChild(pin);
   });
+
 }
 
-function updateActiveNode() {
-  document.querySelectorAll(".orbitNode")
-    .forEach((n, i) => {
-      n.classList.toggle("active", i === currentIndex);
-    });
-}
-
-function updateOrbit(angle) {
-  rotation = -angle;
-  orbitMap.style.transform = `rotate(${rotation}deg)`;
-  sectorHighlight.style.transform = `rotate(${rotation}deg)`;
-}
-
-/* NAVIGATION */
-document.getElementById("leftBtn").onclick = () => {
-  currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-  loadPhoto(currentIndex);
-};
-
-document.getElementById("rightBtn").onclick = () => {
-  currentIndex = (currentIndex + 1) % photos.length;
-  loadPhoto(currentIndex);
-};
-
-/* INIT */
-createNodes();
-loadPhoto(0);
+createPins();
