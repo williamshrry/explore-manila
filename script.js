@@ -14,9 +14,13 @@ let imgScale = 1;
 let imgX = 0;
 let imgY = 0;
 
-let draggingImg = false;
+let isDragging = false;
 let startX = 0;
 let startY = 0;
+
+/* inertia */
+let velX = 0;
+let velY = 0;
 
 /* =========================
 ORBIT STATE
@@ -29,46 +33,93 @@ let draggingOrbit = false;
 let lastX = 0;
 
 /* =========================
-IMAGE PAN
+IMAGE DRAG + VELOCITY
 ========================= */
 
 imageWrapper.addEventListener("mousedown", (e) => {
-  draggingImg = true;
+  isDragging = true;
+
   startX = e.clientX - imgX;
   startY = e.clientY - imgY;
-});
 
-window.addEventListener("mouseup", () => draggingImg = false);
+  velX = 0;
+  velY = 0;
+});
 
 window.addEventListener("mousemove", (e) => {
 
-  if (!draggingImg) return;
+  if (!isDragging) return;
 
-  imgX = e.clientX - startX;
-  imgY = e.clientY - startY;
+  const newX = e.clientX - startX;
+  const newY = e.clientY - startY;
 
-  imageWrapper.style.transform =
-    `translate(${imgX}px, ${imgY}px) scale(${imgScale})`;
+  velX = newX - imgX;
+  velY = newY - imgY;
+
+  imgX = newX;
+  imgY = newY;
+
+  updateImage();
+});
+
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+  inertia();
 });
 
 /* =========================
-IMAGE ZOOM
+INERTIA
 ========================= */
 
-orbitUI.addEventListener("wheel", (e) => {
+function inertia() {
+
+  if (Math.abs(velX) < 0.1 && Math.abs(velY) < 0.1) return;
+
+  velX *= 0.92;
+  velY *= 0.92;
+
+  imgX += velX;
+  imgY += velY;
+
+  updateImage();
+
+  requestAnimationFrame(inertia);
+}
+
+/* =========================
+ZOOM TO CURSOR
+========================= */
+
+document.getElementById("imageContainer").addEventListener("wheel", (e) => {
 
   e.preventDefault();
 
-  imgScale += e.deltaY < 0 ? 0.1 : -0.1;
-  imgScale = Math.max(1, Math.min(4, imgScale));
+  const rect = imageWrapper.getBoundingClientRect();
 
-  imageWrapper.style.transform =
-    `translate(${imgX}px, ${imgY}px) scale(${imgScale})`;
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  const prev = imgScale;
+
+  imgScale += e.deltaY < 0 ? 0.12 : -0.12;
+  imgScale = Math.max(1, Math.min(5, imgScale));
+
+  const factor = imgScale / prev;
+
+  imgX = mouseX - (mouseX - imgX) * factor;
+  imgY = mouseY - (mouseY - imgY) * factor;
+
+  updateImage();
 
 }, { passive: false });
 
+function updateImage() {
+  imageWrapper.style.transform =
+    `translate(${imgX}px, ${imgY}px) scale(${imgScale})`;
+}
+
 /* =========================
-ORBIT ROTATION (DRAG)
+ORBIT ROTATION
 ========================= */
 
 orbitUI.addEventListener("mousedown", (e) => {
@@ -128,7 +179,7 @@ function loadImage(i) {
 loadImage(0);
 
 /* =========================
-CREATE PINS (ANGLE + DISTANCE)
+PINS (ANGLE + DISTANCE)
 ========================= */
 
 function createPins() {
@@ -144,13 +195,11 @@ function createPins() {
 
     const r = p.orbitRadius;
 
-    const center = 100;
+    const cx = 100;
+    const cy = 100;
 
-    const x = Math.cos(angle) * r + center;
-    const y = Math.sin(angle) * r + center;
-
-    pin.style.left = `${x}px`;
-    pin.style.top = `${y}px`;
+    pin.style.left = `${Math.cos(angle) * r + cx}px`;
+    pin.style.top = `${Math.sin(angle) * r + cy}px`;
 
     orbitPins.appendChild(pin);
   });
