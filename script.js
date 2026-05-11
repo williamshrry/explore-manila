@@ -1,5 +1,6 @@
 const mainImage = document.getElementById("mainImage");
 const imageWrapper = document.getElementById("imageWrapper");
+const imageContainer = document.getElementById("imageContainer");
 
 const orbitUI = document.getElementById("orbitUI");
 const orbitMapWrapper = document.getElementById("orbitMapWrapper");
@@ -18,7 +19,6 @@ let isDragging = false;
 let startX = 0;
 let startY = 0;
 
-/* inertia */
 let velX = 0;
 let velY = 0;
 
@@ -33,7 +33,15 @@ let draggingOrbit = false;
 let lastX = 0;
 
 /* =========================
-IMAGE DRAG + VELOCITY
+HELPER: CLAMP
+========================= */
+
+function clamp(val, min, max) {
+  return Math.max(min, Math.min(max, val));
+}
+
+/* =========================
+IMAGE DRAG
 ========================= */
 
 imageWrapper.addEventListener("mousedown", (e) => {
@@ -59,6 +67,7 @@ window.addEventListener("mousemove", (e) => {
   imgX = newX;
   imgY = newY;
 
+  applyBounds();
   updateImage();
 });
 
@@ -81,37 +90,61 @@ function inertia() {
   imgX += velX;
   imgY += velY;
 
+  applyBounds();
   updateImage();
 
   requestAnimationFrame(inertia);
 }
 
 /* =========================
-ZOOM TO CURSOR
+ZOOM (CURSOR-BASED)
 ========================= */
 
-document.getElementById("imageContainer").addEventListener("wheel", (e) => {
+imageContainer.addEventListener("wheel", (e) => {
 
   e.preventDefault();
 
-  const rect = imageWrapper.getBoundingClientRect();
+  const rect = imageContainer.getBoundingClientRect();
 
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
 
-  const prev = imgScale;
+  const prevScale = imgScale;
 
   imgScale += e.deltaY < 0 ? 0.12 : -0.12;
-  imgScale = Math.max(1, Math.min(5, imgScale));
+  imgScale = clamp(imgScale, 1, 5);
 
-  const factor = imgScale / prev;
+  const scaleFactor = imgScale / prevScale;
 
-  imgX = mouseX - (mouseX - imgX) * factor;
-  imgY = mouseY - (mouseY - imgY) * factor;
+  imgX = mouseX - (mouseX - imgX) * scaleFactor;
+  imgY = mouseY - (mouseY - imgY) * scaleFactor;
 
+  applyBounds();
   updateImage();
 
 }, { passive: false });
+
+/* =========================
+BOUNDARY SYSTEM (KEY FIX)
+========================= */
+
+function applyBounds() {
+
+  const rect = imageContainer.getBoundingClientRect();
+
+  const imgWidth = rect.width * imgScale;
+  const imgHeight = rect.height * imgScale;
+
+  const maxX = (imgWidth - rect.width) / 2;
+  const maxY = (imgHeight - rect.height) / 2;
+
+  imgX = clamp(imgX, -maxX, maxX);
+  imgY = clamp(imgY, -maxY, maxY);
+}
+
+/* =========================
+APPLY TRANSFORM
+========================= */
 
 function updateImage() {
   imageWrapper.style.transform =
@@ -158,7 +191,7 @@ orbitUI.addEventListener("wheel", (e) => {
   e.preventDefault();
 
   orbitScale += e.deltaY < 0 ? 0.1 : -0.1;
-  orbitScale = Math.max(1, Math.min(2, orbitScale));
+  orbitScale = clamp(orbitScale, 1, 2);
 
   orbitMapWrapper.style.transform =
     `rotate(${rotation}deg) scale(${orbitScale})`;
