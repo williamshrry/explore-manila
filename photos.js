@@ -35,7 +35,7 @@ const photos = [
     title: "Rear Left Perspective",
     image: "images/img3.jpg",
 
-    orbitAngle: 20,
+    orbitAngle: 50,
     elevation: 22,
     distance: 800,
 
@@ -48,7 +48,7 @@ const photos = [
     title: "Rear Left Perspective",
     image: "images/img4.jpg",
 
-    orbitAngle: 330,
+    orbitAngle: 310,
     elevation: 22,
     distance: 800,
 
