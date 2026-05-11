@@ -2,19 +2,19 @@ const photos = [
 
   {
     image: "images/img1.jpg",
-    orbitAngle: 45,
+    orbitAngle: 160,
     orbitRadius: 60
   },
 
   {
     image: "images/img2.jpg",
-    orbitAngle: 90,
+    orbitAngle: 100,
     orbitRadius: 90
   },
 
   {
     image: "images/img3.jpg",
-    orbitAngle: 220,
+    orbitAngle: 330,
     orbitRadius: 70
   }
 
