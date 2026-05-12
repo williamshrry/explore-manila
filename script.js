@@ -136,7 +136,7 @@ const photoNodes = [
 
     image: "images/img12.jpg",
 
-    angle: 250,
+    angle: 230,
     distance: 280,
     elevation: 80
   },
