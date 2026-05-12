@@ -40,6 +40,17 @@ const photoNodes = [
     angle: 50,
     distance: 180,
     elevation: 90
+  },
+
+    {
+    id: 4,
+    title: "View 4",
+
+    image: "images/img4.jpg",
+
+    angle: 185,
+    distance: 170,
+    elevation: 120
   }
 
 ];
