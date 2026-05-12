@@ -114,7 +114,7 @@ ORBIT PANEL
 
   border: 1px solid rgba(255,255,255,0.08);
 
-  border-radius: 24px;
+  border-radius: 50%;
 
   overflow: hidden;
 
@@ -123,7 +123,19 @@ ORBIT PANEL
   transition:
     width 0.35s ease,
     height 0.35s ease,
-    background 0.35s ease;
+    background 0.35s ease,
+    border-radius 0.35s ease;
+}
+
+/* EXPANDED STATE */
+#orbit-panel:hover {
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  background: rgba(20,20,20,0.92);
 }
 
 #orbit-panel:hover {
