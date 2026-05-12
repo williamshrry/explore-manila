@@ -1,241 +1,206 @@
-const mainImage = document.getElementById("mainImage");
-const imageWrapper = document.getElementById("imageWrapper");
-const imageContainer = document.getElementById("imageContainer");
-
-const orbitUI = document.getElementById("orbitUI");
-const orbitMapWrapper = document.getElementById("orbitMapWrapper");
-const orbitPins = document.getElementById("orbitPins");
-const sectorHighlight = document.getElementById("sectorHighlight");
-
 /* =========================
-IMAGE STATE
+FILE: script.js
 ========================= */
 
-let imgScale = 1;
-let imgX = 0;
-let imgY = 0;
-
-let isDragging = false;
-let startX = 0;
-let startY = 0;
-
-let velX = 0;
-let velY = 0;
-
 /* =========================
-ORBIT STATE
+PHOTO DATABASE
+ADD NEW NODES HERE
 ========================= */
 
-let rotation = 0;
-let orbitScale = 1;
+const photoNodes = [
 
-let draggingOrbit = false;
-let lastX = 0;
+  {
+    id: 1,
+    title: "View 1",
 
-/* =========================
-HELPER: CLAMP
-========================= */
+    image: "images/img1.jpg",
 
-function clamp(val, min, max) {
-  return Math.max(min, Math.min(max, val));
-}
+    angle: 0,
+    distance: 160,
+    elevation: 120
+  },
 
-/* =========================
-IMAGE DRAG
-========================= */
+  {
+    id: 2,
+    title: "View 2",
 
-imageWrapper.addEventListener("mousedown", (e) => {
-  isDragging = true;
+    image: "images/img2.jpg",
 
-  startX = e.clientX - imgX;
-  startY = e.clientY - imgY;
+    angle: 120,
+    distance: 210,
+    elevation: 170
+  },
 
-  velX = 0;
-  velY = 0;
-});
+  {
+    id: 3,
+    title: "View 3",
 
-window.addEventListener("mousemove", (e) => {
+    image: "images/img3.jpg",
 
-  if (!isDragging) return;
+    angle: 250,
+    distance: 130,
+    elevation: 90
+  }
 
-  const newX = e.clientX - startX;
-  const newY = e.clientY - startY;
-
-  velX = newX - imgX;
-  velY = newY - imgY;
-
-  imgX = newX;
-  imgY = newY;
-
-  applyBounds();
-  updateImage();
-});
-
-window.addEventListener("mouseup", () => {
-  isDragging = false;
-  inertia();
-});
+];
 
 /* =========================
-INERTIA
+STATE
 ========================= */
 
-function inertia() {
+let currentIndex = 0;
 
-  if (Math.abs(velX) < 0.1 && Math.abs(velY) < 0.1) return;
-
-  velX *= 0.92;
-  velY *= 0.92;
-
-  imgX += velX;
-  imgY += velY;
-
-  applyBounds();
-  updateImage();
-
-  requestAnimationFrame(inertia);
-}
+const mainImage = document.getElementById("main-image");
+const nodeLayer = document.getElementById("node-layer");
 
 /* =========================
-ZOOM (CURSOR-BASED)
+CREATE MAP NODES
 ========================= */
 
-imageContainer.addEventListener("wheel", (e) => {
+function createNodes() {
 
-  e.preventDefault();
+  nodeLayer.innerHTML = "";
 
-  const rect = imageContainer.getBoundingClientRect();
+  const centerX = 50;
+  const centerY = 50;
 
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
+  photoNodes.forEach((node, index) => {
 
-  const prevScale = imgScale;
+    const angleRad = (node.angle - 90) * Math.PI / 180;
 
-  imgScale += e.deltaY < 0 ? 0.12 : -0.12;
-  imgScale = clamp(imgScale, 1, 5);
+    const orbitRadius = node.distance * 0.15;
 
-  const scaleFactor = imgScale / prevScale;
+    const x = centerX + Math.cos(angleRad) * orbitRadius;
+    const y = centerY + Math.sin(angleRad) * orbitRadius;
 
-  imgX = mouseX - (mouseX - imgX) * scaleFactor;
-  imgY = mouseY - (mouseY - imgY) * scaleFactor;
+    const div = document.createElement("div");
 
-  applyBounds();
-  updateImage();
+    div.classList.add("orbit-node");
 
-}, { passive: false });
+    if(index === currentIndex) {
+      div.classList.add("active");
+    }
 
-/* =========================
-BOUNDARY SYSTEM (KEY FIX)
-========================= */
+    /* Elevation affects node size */
+    const size = 10 + (node.elevation * 0.05);
 
-function applyBounds() {
+    div.style.width = `${size}px`;
+    div.style.height = `${size}px`;
 
-  const rect = imageContainer.getBoundingClientRect();
+    div.style.left = `${x}%`;
+    div.style.top = `${y}%`;
 
-  const imgWidth = rect.width * imgScale;
-  const imgHeight = rect.height * imgScale;
+    div.title = node.title;
 
-  const maxX = (imgWidth - rect.width) / 2;
-  const maxY = (imgHeight - rect.height) / 2;
+    div.addEventListener("click", () => {
+      switchImage(index);
+    });
 
-  imgX = clamp(imgX, -maxX, maxX);
-  imgY = clamp(imgY, -maxY, maxY);
-}
+    nodeLayer.appendChild(div);
 
-/* =========================
-APPLY TRANSFORM
-========================= */
-
-function updateImage() {
-  imageWrapper.style.transform =
-    `translate(${imgX}px, ${imgY}px) scale(${imgScale})`;
-}
-
-/* =========================
-ORBIT ROTATION
-========================= */
-
-orbitUI.addEventListener("mousedown", (e) => {
-  draggingOrbit = true;
-  lastX = e.clientX;
-});
-
-window.addEventListener("mouseup", () => draggingOrbit = false);
-
-window.addEventListener("mousemove", (e) => {
-
-  if (!draggingOrbit) return;
-
-  const dx = e.clientX - lastX;
-  lastX = e.clientX;
-
-  rotation += dx * 0.4;
-
-  orbitMapWrapper.style.transform =
-    `rotate(${rotation}deg) scale(${orbitScale})`;
-
-  orbitPins.style.transform =
-    `rotate(${rotation}deg) scale(${orbitScale})`;
-
-  sectorHighlight.style.transform =
-    `rotate(${rotation}deg)`;
-
-});
-
-/* =========================
-ORBIT ZOOM
-========================= */
-
-orbitUI.addEventListener("wheel", (e) => {
-
-  e.preventDefault();
-
-  orbitScale += e.deltaY < 0 ? 0.1 : -0.1;
-  orbitScale = clamp(orbitScale, 1, 2);
-
-  orbitMapWrapper.style.transform =
-    `rotate(${rotation}deg) scale(${orbitScale})`;
-
-  orbitPins.style.transform =
-    `rotate(${rotation}deg) scale(${orbitScale})`;
-
-}, { passive: false });
-
-/* =========================
-LOAD IMAGE
-========================= */
-
-function loadImage(i) {
-  mainImage.src = photos[i].image;
-}
-
-loadImage(0);
-
-/* =========================
-PINS (ANGLE + DISTANCE)
-========================= */
-
-function createPins() {
-
-  orbitPins.innerHTML = "";
-
-  photos.forEach(p => {
-
-    const pin = document.createElement("div");
-    pin.className = "orbitPin";
-
-    const angle = (p.orbitAngle - 90) * Math.PI / 180;
-
-    const r = p.orbitRadius;
-
-    const cx = 100;
-    const cy = 100;
-
-    pin.style.left = `${Math.cos(angle) * r + cx}px`;
-    pin.style.top = `${Math.sin(angle) * r + cy}px`;
-
-    orbitPins.appendChild(pin);
   });
+
 }
 
-createPins();
+/* =========================
+SWITCH IMAGE
+========================= */
+
+function switchImage(index) {
+
+  currentIndex = index;
+
+  mainImage.style.opacity = 0;
+
+  mainImage.style.transform = "scale(1.03)";
+
+  setTimeout(() => {
+
+    mainImage.src = photoNodes[index].image;
+
+    mainImage.onload = () => {
+
+      mainImage.style.opacity = 1;
+
+      mainImage.style.transform = "scale(1)";
+    };
+
+    createNodes();
+
+  }, 220);
+
+}
+
+/* =========================
+LEFT / RIGHT NAVIGATION
+========================= */
+
+function nextImage() {
+
+  currentIndex++;
+
+  if(currentIndex >= photoNodes.length) {
+    currentIndex = 0;
+  }
+
+  switchImage(currentIndex);
+
+}
+
+function prevImage() {
+
+  currentIndex--;
+
+  if(currentIndex < 0) {
+    currentIndex = photoNodes.length - 1;
+  }
+
+  switchImage(currentIndex);
+
+}
+
+document.getElementById("nextBtn")
+  .addEventListener("click", nextImage);
+
+document.getElementById("prevBtn")
+  .addEventListener("click", prevImage);
+
+/* =========================
+PAN + ZOOM
+========================= */
+
+const imageWrapper = document.getElementById("image-wrapper");
+
+const panzoom = Panzoom(mainImage, {
+
+  maxScale: 6,
+  minScale: 1,
+
+  contain: "outside",
+
+  step: 0.15
+});
+
+imageWrapper.addEventListener("wheel", panzoom.zoomWithWheel);
+
+/* =========================
+KEYBOARD SUPPORT
+========================= */
+
+window.addEventListener("keydown", (e) => {
+
+  if(e.key === "ArrowRight") {
+    nextImage();
+  }
+
+  if(e.key === "ArrowLeft") {
+    prevImage();
+  }
+
+});
+
+/* =========================
+INITIALIZE
+========================= */
+
+createNodes();
