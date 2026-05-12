@@ -141,6 +141,17 @@ const photoNodes = [
     elevation: 80
   },
 
+  {
+    id: 13,
+    title: "View 13",
+
+    image: "images/img13.jpg",
+
+    angle: 170,
+    distance: 25,
+    elevation: 10
+  },
+
 
 
 ];
