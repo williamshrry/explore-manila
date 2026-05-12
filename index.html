@@ -1,44 +1,53 @@
+<!-- =========================
+FILE: index.html
+========================= -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aerial Flight Orbit System</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manila Orbital Viewer</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Panzoom -->
+  <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
 </head>
 
 <body>
 
-<div id="viewer">
+  <!-- MAIN VIEWER -->
+  <div id="viewer-container">
 
-  <!-- IMAGE VIEWER -->
-  <div id="imageContainer">
-    <div id="imageWrapper">
-      <img id="mainImage">
-    </div>
-  </div>
+    <button class="nav-btn left" id="prevBtn">&#10094;</button>
 
-  <!-- ORBIT UI -->
-  <div id="orbitUI">
-
-    <div id="orbitMapWrapper">
-
-      <img id="orbitMap" src="images/topview.jpg">
-
-      <div id="orbitPins"></div>
-
-      <div class="orbitCenter"></div>
-
+    <div id="image-wrapper">
+      <img id="main-image" src="images/img1.jpg" draggable="false"/>
     </div>
 
-    <div id="sectorHighlight"></div>
+    <button class="nav-btn right" id="nextBtn">&#10095;</button>
 
   </div>
 
-</div>
+  <!-- ORBIT MAP -->
+  <div id="orbit-panel">
 
-<script src="photos.js"></script>
-<script src="script.js"></script>
+    <div id="orbit-header">
+      ORBIT MAP
+    </div>
+
+    <div id="map-container">
+
+      <img id="topview" src="images/topview.jpg" draggable="false"/>
+
+      <div id="node-layer"></div>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
 
 </body>
 </html>
