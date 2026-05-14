@@ -92,8 +92,8 @@ const photoNodes = [
 
     image: "images/img8.jpg",
 
-    angle: 150,
-    distance: 10,
+    angle: 140,
+    distance: 12,
     elevation: 10
   },
 
@@ -147,8 +147,8 @@ const photoNodes = [
 
     image: "images/img13.jpg",
 
-    angle: 200,
-    distance: 65,
+    angle: 205,
+    distance: 68,
     elevation: 10
   },
 
@@ -158,7 +158,7 @@ const photoNodes = [
 
     image: "images/img14.jpg",
 
-    angle: 60,
+    angle: 70,
     distance: 140,
     elevation: 70
   },
@@ -170,7 +170,7 @@ const photoNodes = [
     image: "images/img15.jpg",
 
     angle: 310,
-    distance: 110,
+    distance: 105,
     elevation: 55
   },
 
@@ -180,7 +180,7 @@ const photoNodes = [
 
     image: "images/img16.jpg",
 
-    angle: 310,
+    angle: 285,
     distance: 330,
     elevation: 50
   },
@@ -192,7 +192,7 @@ const photoNodes = [
     image: "images/img17.jpg",
 
     angle: 305,
-    distance: 130,
+    distance: 150,
     elevation: 50
   },
 
