@@ -160,7 +160,7 @@ const photoNodes = [
 
     angle: 70,
     distance: 140,
-    elevation: 70
+    elevation: 10
   },
 
    {
