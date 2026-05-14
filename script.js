@@ -39,7 +39,7 @@ const photoNodes = [
 
     angle: 55,
     distance: 320,
-    elevation: 90
+    elevation: 170
   },
 
   {
@@ -182,7 +182,7 @@ const photoNodes = [
 
     angle: 285,
     distance: 330,
-    elevation: 50
+    elevation: 170
   },
 
    {
