@@ -251,6 +251,17 @@ const photoNodes = [
     elevation: 10
   },
 
+   {
+    id: 23,
+    title: "View 23",
+
+    image: "images/img23.jpg",
+
+    angle: 360,
+    distance: 150,
+    elevation: 10
+  },
+
 ];
 
 /* =========================
