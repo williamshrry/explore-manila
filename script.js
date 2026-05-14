@@ -203,7 +203,7 @@ const photoNodes = [
     image: "images/img18.jpg",
 
     angle: 325,
-    distance: 155,
+    distance: 160,
     elevation: 10
   },
 
@@ -214,8 +214,8 @@ const photoNodes = [
     image: "images/img19.jpg",
 
     angle: 318,
-    distance: 115,
-    elevation: 55
+    distance: 118,
+    elevation: 10
   },
 
 ];
