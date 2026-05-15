@@ -18,10 +18,6 @@ const photoNodes = [
     angle: 130,
     distance: 240,
     elevation: 170,
-
-    viewDistance: 120,
-    viewAngle: 42,
-    viewRotation: 40
   },
 
   {
@@ -174,7 +170,7 @@ const photoNodes = [
     image: "images/img15.jpg",
 
     angle: 310,
-    distance: 102,
+    distance: 97,
     elevation: 10
   },
 
