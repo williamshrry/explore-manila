@@ -49,6 +49,7 @@ MAIN VIEWER
   object-fit: contain;
 
   user-select: none;
+
   transform-origin: center center;
 
   transition:
@@ -57,13 +58,14 @@ MAIN VIEWER
 }
 
 /* =========================
-NAV BUTTONS
+NAVIGATION BUTTONS
 ========================= */
 
 .nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+
   z-index: 999;
 
   width: 54px;
@@ -85,7 +87,10 @@ NAV BUTTONS
 
 .nav-btn:hover {
   background: rgba(255,255,255,0.18);
-  transform: translateY(-50%) scale(1.08);
+
+  transform:
+    translateY(-50%)
+    scale(1.08);
 }
 
 .left {
@@ -110,6 +115,7 @@ ORBIT PANEL
   height: 210px;
 
   background: rgba(15,15,15,0.78);
+
   backdrop-filter: blur(18px);
 
   border: 1px solid rgba(255,255,255,0.08);
@@ -123,22 +129,11 @@ ORBIT PANEL
   transition:
     width 0.35s ease,
     height 0.35s ease,
-    background 0.35s ease,
-    border-radius 0.35s ease;
-}
-
-/* EXPANDED STATE */
-#orbit-panel:hover {
-
-  width: 420px;
-  height: 420px;
-
-  border-radius: 50%;
-
-  background: rgba(20,20,20,0.92);
+    background 0.35s ease;
 }
 
 #orbit-panel:hover {
+
   width: 420px;
   height: 420px;
 
@@ -147,6 +142,7 @@ ORBIT PANEL
 
 #orbit-header {
   position: absolute;
+
   top: 14px;
   left: 18px;
 
@@ -154,8 +150,13 @@ ORBIT PANEL
 
   font-size: 12px;
   letter-spacing: 2px;
+
   opacity: 0.7;
 }
+
+/* =========================
+MAP CONTAINER
+========================= */
 
 #map-container {
   position: relative;
@@ -164,10 +165,27 @@ ORBIT PANEL
   height: 100%;
 
   overflow: hidden;
+
+  border-radius: 50%;
 }
 
 /* =========================
-TOP VIEW MAP
+ZOOMABLE MAP CONTENT
+========================= */
+
+#map-content {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  transform-origin: center center;
+
+  transition: transform 0.08s linear;
+}
+
+/* =========================
+TOP VIEW IMAGE
 ========================= */
 
 #topview {
@@ -178,10 +196,51 @@ TOP VIEW MAP
 
   border-radius: 50%;
 
-  transform-origin: center center;
-
-  transition: transform 0.25s ease;
+  user-select: none;
 }
+
+/* =========================
+CONE LAYER
+========================= */
+
+#cone-layer {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+
+  pointer-events: none;
+}
+
+/* =========================
+VIEW CONES
+========================= */
+
+.view-cone {
+
+  fill: rgba(255,255,255,0.10);
+
+  stroke: rgba(255,255,255,0.22);
+
+  stroke-width: 0.6;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.25s ease,
+    fill 0.25s ease;
+}
+
+.view-cone.active {
+
+  opacity: 1;
+
+  fill: rgba(255,255,255,0.16);
+}
+
 /* =========================
 NODE LAYER
 ========================= */
@@ -192,13 +251,14 @@ NODE LAYER
 }
 
 /* =========================
-NODES
+ORBIT NODES
 ========================= */
 
 .orbit-node {
   position: absolute;
 
   border-radius: 50%;
+
   cursor: pointer;
 
   transform: translate(-50%, -50%);
@@ -211,17 +271,22 @@ NODES
   border: 2px solid white;
 
   background: rgba(255,255,255,0.12);
+
   backdrop-filter: blur(6px);
 }
 
 .orbit-node:hover {
-  transform: translate(-50%, -50%) scale(1.25);
+
+  transform:
+    translate(-50%, -50%)
+    scale(1.25);
 
   box-shadow:
     0 0 16px rgba(255,255,255,0.5);
 }
 
 .orbit-node.active {
+
   background: white;
 
   box-shadow:
