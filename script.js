@@ -340,30 +340,101 @@ STATE
 
 let currentIndex = 0;
 
-const mainImage = document.getElementById("main-image");
-const nodeLayer = document.getElementById("node-layer");
+const mainImage =
+  document.getElementById("main-image");
+
+const nodeLayer =
+  document.getElementById("node-layer");
+
+const coneLayer =
+  document.getElementById("cone-layer");
 
 /* =========================
-CREATE MAP NODES
+CREATE NODES + CONES
 ========================= */
 
 function createNodes() {
 
   nodeLayer.innerHTML = "";
+  coneLayer.innerHTML = "";
 
   const centerX = 50;
   const centerY = 50;
 
   photoNodes.forEach((node, index) => {
 
-    const angleRad = (node.angle - 90) * Math.PI / 180;
+    const angleRad =
+      (node.angle - 90) * Math.PI / 180;
 
-    const orbitRadius = node.distance * 0.15;
+    const orbitRadius =
+      node.distance * 0.15;
 
-    const x = centerX + Math.cos(angleRad) * orbitRadius;
-    const y = centerY + Math.sin(angleRad) * orbitRadius;
+    const x =
+      centerX + Math.cos(angleRad) * orbitRadius;
 
-    const div = document.createElement("div");
+    const y =
+      centerY + Math.sin(angleRad) * orbitRadius;
+
+    /* =========================
+    CREATE VIEW CONE
+    ========================= */
+
+    const cone =
+      document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+
+    cone.classList.add("view-cone");
+
+    if(index === currentIndex) {
+      cone.classList.add("active");
+    }
+
+    const coneRotation =
+      node.viewRotation *
+      Math.PI / 180;
+
+    const halfAngle =
+      (node.viewAngle / 2) *
+      Math.PI / 180;
+
+    const coneLength =
+      node.viewDistance * 0.15;
+
+    const x1 =
+      x + Math.cos(coneRotation - halfAngle)
+      * coneLength;
+
+    const y1 =
+      y + Math.sin(coneRotation - halfAngle)
+      * coneLength;
+
+    const x2 =
+      x + Math.cos(coneRotation + halfAngle)
+      * coneLength;
+
+    const y2 =
+      y + Math.sin(coneRotation + halfAngle)
+      * coneLength;
+
+    const pathData = `
+      M ${x}% ${y}%
+      L ${x1}% ${y1}%
+      A ${coneLength}% ${coneLength}% 0 0 1 ${x2}% ${y2}%
+      Z
+    `;
+
+    cone.setAttribute("d", pathData);
+
+    coneLayer.appendChild(cone);
+
+    /* =========================
+    CREATE NODE
+    ========================= */
+
+    const div =
+      document.createElement("div");
 
     div.classList.add("orbit-node");
 
@@ -371,8 +442,10 @@ function createNodes() {
       div.classList.add("active");
     }
 
-    /* Elevation affects node size */
-    const size = 10 + (node.elevation * 0.05);
+    /* NODE SIZE BASED ON ELEVATION */
+
+    const size =
+      10 + (node.elevation * 0.05);
 
     div.style.width = `${size}px`;
     div.style.height = `${size}px`;
@@ -381,6 +454,22 @@ function createNodes() {
     div.style.top = `${y}%`;
 
     div.title = node.title;
+
+    /* HOVER */
+
+    div.addEventListener("mouseenter", () => {
+      cone.classList.add("active");
+    });
+
+    div.addEventListener("mouseleave", () => {
+
+      if(index !== currentIndex) {
+        cone.classList.remove("active");
+      }
+
+    });
+
+    /* CLICK */
 
     div.addEventListener("click", () => {
       switchImage(index);
@@ -402,17 +491,20 @@ function switchImage(index) {
 
   mainImage.style.opacity = 0;
 
-  mainImage.style.transform = "scale(1.03)";
+  mainImage.style.transform =
+    "scale(1.03)";
 
   setTimeout(() => {
 
-    mainImage.src = photoNodes[index].image;
+    mainImage.src =
+      photoNodes[index].image;
 
     mainImage.onload = () => {
 
       mainImage.style.opacity = 1;
 
-      mainImage.style.transform = "scale(1)";
+      mainImage.style.transform =
+        "scale(1)";
     };
 
     createNodes();
@@ -422,7 +514,7 @@ function switchImage(index) {
 }
 
 /* =========================
-LEFT / RIGHT NAVIGATION
+NEXT / PREVIOUS
 ========================= */
 
 function nextImage() {
@@ -442,7 +534,8 @@ function prevImage() {
   currentIndex--;
 
   if(currentIndex < 0) {
-    currentIndex = photoNodes.length - 1;
+    currentIndex =
+      photoNodes.length - 1;
   }
 
   switchImage(currentIndex);
@@ -456,22 +549,59 @@ document.getElementById("prevBtn")
   .addEventListener("click", prevImage);
 
 /* =========================
-PAN + ZOOM
+PAN + ZOOM MAIN IMAGE
 ========================= */
 
-const imageWrapper = document.getElementById("image-wrapper");
+const imageWrapper =
+  document.getElementById("image-wrapper");
 
-const panzoom = Panzoom(mainImage, {
+const panzoom =
+  Panzoom(mainImage, {
 
-  maxScale: 6,
-  minScale: 1,
+    maxScale: 6,
+    minScale: 1,
 
-  contain: "outside",
+    contain: "outside",
 
-  step: 0.15
-});
+    step: 0.15
+  });
 
-imageWrapper.addEventListener("wheel", panzoom.zoomWithWheel);
+imageWrapper.addEventListener(
+  "wheel",
+  panzoom.zoomWithWheel
+);
+
+/* =========================
+MAP ZOOM
+========================= */
+
+const mapContainer =
+  document.getElementById("map-container");
+
+const mapContent =
+  document.getElementById("map-content");
+
+let mapScale = 1;
+
+mapContainer.addEventListener("wheel", (e) => {
+
+  e.preventDefault();
+
+  const zoomSpeed = 0.12;
+
+  if(e.deltaY < 0) {
+    mapScale += zoomSpeed;
+  } else {
+    mapScale -= zoomSpeed;
+  }
+
+  mapScale =
+    Math.max(1, Math.min(mapScale, 4));
+
+  mapContent.style.transform =
+    `scale(${mapScale})`;
+
+}, { passive: false });
 
 /* =========================
 KEYBOARD SUPPORT
@@ -488,6 +618,28 @@ window.addEventListener("keydown", (e) => {
   }
 
 });
+
+/* =========================
+BACKGROUND MUSIC
+========================= */
+
+const bgMusic =
+  document.getElementById("bg-music");
+
+function startMusic() {
+
+  bgMusic.play();
+
+  window.removeEventListener(
+    "click",
+    startMusic
+  );
+}
+
+window.addEventListener(
+  "click",
+  startMusic
+);
 
 /* =========================
 INITIALIZE
