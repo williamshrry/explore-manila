@@ -1,7 +1,3 @@
-<!-- =========================
-FILE: index.html
-========================= -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,32 +35,28 @@ FILE: index.html
 
     <div id="map-container">
 
-  <div id="map-content">
+      <div id="map-content">
 
-    <!-- TOP VIEW IMAGE -->
-    <img id="topview"
-         src="images/topview.jpg"
-         draggable="false"/>
+        <!-- TOP VIEW MAP -->
+        <img id="topview"
+             src="images/topview.jpg"
+             draggable="false"/>
 
-    <!-- CAMERA VIEW CONES -->
-    <svg id="cone-layer"></svg>
+        <!-- NODE LAYER -->
+        <div id="node-layer"></div>
 
-    <!-- PHOTO NODES -->
-    <div id="node-layer"></div>
+      </div>
+
+    </div>
 
   </div>
 
-</div>
-
+  <!-- BOTTOM RIGHT HINT -->
+  <div id="hint-text">
+    Navigate using the map | Zoom and pan both the image view and minimap
   </div>
 
   <script src="script.js"></script>
-
-  <audio id="bg-music" loop>
-
-  <source src="audio/music.mp3" type="audio/mpeg">
-
-</audio>
 
 </body>
 </html>
