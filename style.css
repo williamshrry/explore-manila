@@ -265,3 +265,32 @@ ORBIT NODES
   box-shadow:
     0 0 20px rgba(255,255,255,0.7);
 }
+
+/* =========================
+BOTTOM RIGHT HINT TEXT
+========================= */
+
+#hint-text {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+
+  font-size: 12px;
+  letter-spacing: 0.4px;
+
+  color: rgba(255,255,255,0.65);
+
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+
+  padding: 8px 12px;
+
+  user-select: none;
+  pointer-events: none;
+
+  z-index: 9999;
+}
+
