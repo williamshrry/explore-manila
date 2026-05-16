@@ -29,8 +29,11 @@ MAIN VIEWER
 #image-wrapper {
   width: 100vw;
   height: 100vh;
+
   overflow: hidden;
+
   cursor: grab;
+
   position: relative;
 }
 
@@ -40,6 +43,7 @@ MAIN VIEWER
 
 #main-image {
   position: absolute;
+
   top: 0;
   left: 0;
 
@@ -63,6 +67,7 @@ NAVIGATION BUTTONS
 
 .nav-btn {
   position: absolute;
+
   top: 50%;
   transform: translateY(-50%);
 
@@ -75,9 +80,11 @@ NAVIGATION BUTTONS
   border-radius: 50%;
 
   background: rgba(20,20,20,0.6);
+
   backdrop-filter: blur(8px);
 
   color: white;
+
   font-size: 28px;
 
   cursor: pointer;
@@ -86,6 +93,7 @@ NAVIGATION BUTTONS
 }
 
 .nav-btn:hover {
+
   background: rgba(255,255,255,0.18);
 
   transform:
@@ -149,6 +157,7 @@ ORBIT PANEL
   z-index: 20;
 
   font-size: 12px;
+
   letter-spacing: 2px;
 
   opacity: 0.7;
@@ -167,6 +176,12 @@ MAP CONTAINER
   overflow: hidden;
 
   border-radius: 50%;
+
+  cursor: grab;
+}
+
+#map-container:active {
+  cursor: grabbing;
 }
 
 /* =========================
@@ -197,48 +212,6 @@ TOP VIEW IMAGE
   border-radius: 50%;
 
   user-select: none;
-}
-
-/* =========================
-CONE LAYER
-========================= */
-
-#cone-layer {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  overflow: visible;
-
-  pointer-events: none;
-}
-
-/* =========================
-VIEW CONES
-========================= */
-
-.view-cone {
-
-  fill: rgba(255,255,255,0.10);
-
-  stroke: rgba(255,255,255,0.22);
-
-  stroke-width: 0.6;
-
-  opacity: 0;
-
-  transition:
-    opacity 0.25s ease,
-    fill 0.25s ease;
-}
-
-.view-cone.active {
-
-  opacity: 1;
-
-  fill: rgba(255,255,255,0.16);
 }
 
 /* =========================
