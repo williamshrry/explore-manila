@@ -538,21 +538,6 @@ window.addEventListener("keydown", (e) => {
   if(e.key === "ArrowLeft") prevImage();
 
 });
-
-/* =========================
-MUSIC START (CLICK TO PLAY)
-========================= */
-
-const bgMusic =
-  document.getElementById("bg-music");
-
-function startMusic() {
-  bgMusic.play();
-  window.removeEventListener("click", startMusic);
-}
-
-window.addEventListener("click", startMusic);
-
 /* =========================
 INIT
 ========================= */
