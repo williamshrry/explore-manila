@@ -278,15 +278,16 @@ BOTTOM RIGHT HINT TEXT
   font-size: 12px;
   letter-spacing: 0.4px;
 
-  color: rgba(255,255,255,0.65);
+  font-family: "JetBrains Mono", monospace;
 
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(8px);
+  color: rgba(255,255,255,0.7);
 
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 10px;
+  background: none;
+  backdrop-filter: none;
 
-  padding: 8px 12px;
+  border: none;
+
+  padding: 0;
 
   user-select: none;
   pointer-events: none;
