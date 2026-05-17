@@ -99,20 +99,20 @@ const photoNodes = [
   },
 
   {
-    id: 11,
-    title: "View 11",
-    image: "images/img11.jpg",
-    angle: 215,
-    distance: 68,
-    elevation: 10
-  },
-
-  {
     id: 30,
     title: "View 30",
     image: "images/img30.jpg",
     angle: 215,
     distance: 45,
+    elevation: 10
+  },
+
+  {
+    id: 11,
+    title: "View 11",
+    image: "images/img11.jpg",
+    angle: 215,
+    distance: 68,
     elevation: 10
   },
 
