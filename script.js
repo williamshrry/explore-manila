@@ -206,21 +206,21 @@ const photoNodes = [
     elevation: 10
   },
 
-   {
-    id: 32,
-    title: "View 32",
-    image: "images/img32.jpg",
-    angle: 365,
-    distance: 153,
-    elevation: 10
-  },
-
   {
     id: 21,
     title: "View 21",
     image: "images/img21.jpg",
     angle: 360,
     distance: 145,
+    elevation: 10
+  },
+
+  {
+    id: 32,
+    title: "View 32",
+    image: "images/img32.jpg",
+    angle: 365,
+    distance: 153,
     elevation: 10
   },
 
@@ -234,20 +234,20 @@ const photoNodes = [
   },
 
   {
-    id: 35,
-    title: "View 35",
-    image: "images/img35.jpg",
-    angle: 40,
-    distance: 200,
-    elevation: 10
-  },
-
-  {
     id: 23,
     title: "View 23",
     image: "images/img23.jpg",
     angle: 38,
     distance: 240,
+    elevation: 10
+  },
+
+  {
+    id: 35,
+    title: "View 35",
+    image: "images/img35.jpg",
+    angle: 40,
+    distance: 200,
     elevation: 10
   },
 
@@ -318,7 +318,7 @@ const photoNodes = [
     id: 34,
     title: "View 34",
     image: "images/img34.jpg",
-    angle: 105,
+    angle: 100,
     distance: 250,
     elevation: 10
   },
